@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ExpenseResource\Pages;
 use App\Filament\Resources\ExpenseResource\RelationManagers;
 use App\Models\Expense;
+use Faker\Provider\ar_EG\Text;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
@@ -27,11 +28,11 @@ class ExpenseResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('type_expense')
-                ->name('Descrição da despesa')
-                ->required()
-                ->maxLength(255),
-                Select::make('payment')
+                Select::make('account_id')
+                ->label('Conta')
+                ->relationship('account', 'institute')
+                ->required(),
+                Select::make('type_of_payment')
                 ->name('Forma de Pagamento')
                 ->options([
                     'credito' => 'Cartão de Credito',
@@ -40,13 +41,18 @@ class ExpenseResource extends Resource
                     'outros' => 'Outros'
                 ])
                 ->required(),
-                DatePicker::make('day_payment')
-                ->name('Data do pagamento')
+                TextInput::make('value')
+                ->name('Qual o valor?')
+                ->numeric()
+                ->required(),
+                TextInput::make('discription')
+                ->name('Descrição da despesa')
                 ->required()
-                ->maxDate(now()),
-                Select::make('accounts_id')
-                ->name('Em qual conta que foi paga?')
-                ->relationship('account', 'institute')
+                ->maxLength(255),
+                DatePicker::make('date_of_payment')
+                ->native(false)
+                ->displayFormat('d/m/Y')
+                ->name('Data do pagamento')
                 ->required(),
             ]);
     }
@@ -55,8 +61,9 @@ class ExpenseResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('account.institute'),
                 TextColumn::make('type_of_payment'),
-                TextColumn::make('valeu'),
+                TextColumn::make('value'),
                 TextColumn::make('discription'),
                 TextColumn::make('date_of_payment')
             ])

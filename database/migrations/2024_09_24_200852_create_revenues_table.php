@@ -12,13 +12,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('expenses', function (Blueprint $table) {
+        Schema::create('revenues', function (Blueprint $table) {
             $table->ulid('id')->primary()->index()->unique();
             $table->foreignIdFor(Account::class);
-            $table->string('type_of_payment');
+            $table->string('type_of_receipt');
             $table->unsignedInteger('value');
             $table->string('discription');
-            $table->date('date_of_payment');
+            $table->date('date_of_receipt');
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('expenses');
+        Schema::dropIfExists('revenues');
     }
 };

@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\AccountResource\Pages;
 
 use App\Filament\Resources\AccountResource;
+use App\Services\Account\Account;
 use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Database\Eloquent\Model;
@@ -20,6 +21,6 @@ class CreateAccount extends CreateRecord
     {
         data_set($data, 'user_id', auth()->id());
         
-        return static::getModel()::create($data);
+        return (new Account())->create($data);
     }
 }
