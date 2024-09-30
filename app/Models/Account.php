@@ -43,7 +43,7 @@ class Account extends Model
         return $this->hasMany(Expense::class);    
     }
 
-    public function revenues(): HasMany
+    public function revenue(): HasMany
     {
         return $this->hasMany(Revenue::class);    
     }

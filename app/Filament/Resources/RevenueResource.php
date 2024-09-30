@@ -6,9 +6,13 @@ use App\Filament\Resources\RevenueResource\Pages;
 use App\Filament\Resources\RevenueResource\RelationManagers;
 use App\Models\Revenue;
 use Filament\Forms;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -23,7 +27,33 @@ class RevenueResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Select::make('account_id')
+                ->label('Conta')
+                ->relationship('account', 'institute')
+                ->required(),
+                Select::make('type_of_receipt')
+                ->label('Forma de Recebimento')
+                ->options([
+                    'pix' => 'PIX',
+                    'cheque' => 'Cheque',
+                    'dinheiro' => 'Dinheiro',
+                    'transferencia' => 'TED',
+                    'outros' => 'Outros'
+                ])
+                ->required(),
+                TextInput::make('value')
+                ->name('Qual o valor?')
+                ->numeric()
+                ->required(),
+                TextInput::make('discription')
+                ->name('Descrição do recebimento')
+                ->required()
+                ->maxLength(255),
+                DatePicker::make('date_of_receipt')
+                ->native(false)
+                ->displayFormat('d/m/Y')
+                ->name('Data de Recebimento')
+                ->required(),
             ]);
     }
 
@@ -31,7 +61,11 @@ class RevenueResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('account.institute'),
+                TextColumn::make('type_of_receipt'),
+                TextColumn::make('value'),
+                TextColumn::make('discription'),
+                TextColumn::make('date_of_receipt')
             ])
             ->filters([
                 //
